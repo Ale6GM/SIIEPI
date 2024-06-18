@@ -82,6 +82,31 @@
                     </div>
                 </div>
 
+                <div class="row">
+                    <div class="form-group col-4">
+                        {!! Form::label(null, 'Sistema') !!}
+                        <br>
+                        @foreach ($sistemas as $sistema)
+                            <label class="mr-3">                                
+                                {!! Form::checkbox('sistemas[]', $sistema->id, null,) !!}
+                                {{$sistema->descripcion}}
+                            </label>
+                            
+                        @endforeach
+
+                    </div>
+                    <div class="form-group col-8">
+                        {!! Form::label(null, 'Roturas') !!}
+                        <br>
+                        @foreach ($roturas as $rotura)
+                            <label>
+                                {!! Form::checkbox('roturas[]', $rotura->id, null) !!}
+                                {{$rotura->descripcion}}
+                            </label>
+                        @endforeach
+                    </div>
+                </div>
+
                 {!! Form::submit('Guardar', ['class'=> 'btn btn-primary']) !!}
 
             {!! Form::close() !!}

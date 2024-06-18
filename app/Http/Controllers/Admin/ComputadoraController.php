@@ -87,7 +87,9 @@ class ComputadoraController extends Controller
     {
         $areas = Area::pluck('descripcion', 'id');
         $actividades = Actividad::pluck('descripcion', 'id');
-        return view('admin.computadoras.edit', compact('computadora', 'areas', 'actividades'));
+        $sistemas = Sistema::all();
+        $roturas = Rotura::all();
+        return view('admin.computadoras.edit', compact('computadora', 'areas', 'actividades', 'sistemas', 'roturas'));
     }
 
     /**
@@ -96,6 +98,14 @@ class ComputadoraController extends Controller
     public function update(ComputadorasUpdateRequest $request, Computadora $computadora)
     {
         $computadora->update($request->all());
+
+        if($computadora->sistemas) {
+            $computadora->sistemas()->sync($request->sistemas);
+        }
+
+        if($computadora->roturas) {
+            $computadora->roturas()->sync($request->roturas);
+        }
 
         session()->flash('alert', [
             'title' => 'Computadora Actualizada',
@@ -111,7 +121,11 @@ class ComputadoraController extends Controller
      */
     public function destroy(Computadora $computadora)
     {
+        $computadora->sistemas()->detach();
+        $computadora->roturas()->detach();
         $computadora->delete();
+
+        
 
         session()->flash('alert', [
             'title' => 'Computadora Eliminada',
